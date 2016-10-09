@@ -4,12 +4,14 @@ class Matriz:
 
     #Inicaliza o objeto matriz com os dados fornecidos ou retorna um matriz zerada
     def __init__(self, linhas, colunas, dados = None):
-        self._linhas = linhas
-        self._colunas = colunas
-        
+
         if not (dados is None):
+            self._linhas = len(dados)
+            self._colunas = len(dados[0])
             self._dados = dados
         else:
+            self._linhas = linhas
+            self._colunas = colunas
             self._dados = [[0 for x in range(linhas)] for y in range(colunas)]
             
     #Calcula a matriz identidade
@@ -32,6 +34,10 @@ class Matriz:
             for i in range(self._colunas):
                 produto = produto * matriz._dados[i][i+x]
             determinante = determinante + produto
+
+        for y in range(self._colunas):
+            print "posicao [%d][%d]" %(y, matriz._colunas -y)
+
         return determinante
 
     def expandirMatriz(self):
