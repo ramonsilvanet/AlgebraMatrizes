@@ -1,7 +1,6 @@
 from matriz import Matriz
 
-m = Matriz(5, 5)
-z = m.criarMatrizComDadosAleatorios(3,3)
+dados = [[1,2,1], [2,-1,1], [3,1,-1]]
+m = Matriz(3, 3, dados)
 
-identidade = m.matrizIdentidade(3)
-print identidade
+print m.calcularDeterminante()
