@@ -1,19 +1,15 @@
-from random import randint
-
+import copy
 class Matriz:
 
     #Inicaliza o objeto matriz com os dados fornecidos ou retorna um matriz zerada
-    def __init__(self, linhas, colunas, dados = None):
+    def __init__(self, linhas, colunas, dados, resultados):
 
         if not (dados is None):
             self._linhas = len(dados)
             self._colunas = len(dados[0])
             self._dados = dados
-        else:
-            self._linhas = linhas
-            self._colunas = colunas
-            self._dados = [[0 for x in range(linhas)] for y in range(colunas)]
-            
+            self._resultados = resultados
+
     #Calcula a matriz identidade
     def identidade(self, dimensao):
         matrizIdentidade = Matriz(dimensao,dimensao)
@@ -22,30 +18,35 @@ class Matriz:
         return matrizIdentidade
     
     #calcula a determinante da matriz
-    def calcularDeterminante(self):
-        if self._linhas == 3 and self._colunas == 3:
-            matriz = Matriz(self._linhas+2, self._colunas, self.expandirMatriz())
+    def determinante(self, dados):
+        numeroDeLinhas = len(dados)
+        if numeroDeLinhas > 2:
+            i = 1
+            t = 0
+            soma = 0
+            while t <= numeroDeLinhas - 1:
+                d = {}
+                t1 = 1
+                while t1 <= numeroDeLinhas - 1:
+                    m = 0
+                    d[t1] = []
+                    while m <= numeroDeLinhas - 1:
+                        if (m != t):
+                            d[t1].append(dados[t1][m])
+                        m += 1
+                    t1 += 1
+                auxiliar = [d[x] for x in d]
+                soma += i * (dados[0][t]) * (self.determinante(auxiliar))
+                i *= -1
+                t += 1
+            return soma
         else:
-            matriz = Matriz(self._linhas, self._colunas, self._dados)
+            return dados[0][0] * dados[1][1] - dados[0][1] * dados[1][0]
 
-        determinante = 0
-        for x in range(self._colunas):
-            produto = 1
-            for i in range(self._colunas):
-                produto = produto * matriz._dados[i][i+x]
-            determinante = determinante + produto
+    def substituirColuna(self, dados, coluna, posicao):
+        aux = [[dados[x][y] for y in range(len(dados[0]))] for x in range(len(dados))]
 
-        for y in range(self._colunas):
-            print "posicao [%d][%d]" %(y, matriz._colunas -y)
+        for x in range(len(dados)):
+            aux[x][posicao] = coluna[x]
+        return aux
 
-        return determinante
-
-    def expandirMatriz(self):
-        novaMatriz = [[0 for x in range(self._linhas + 2)] for y in range(self._colunas)]
-
-        for i in range(0, self._linhas):
-            for j in range(0, self._colunas):
-                novaMatriz[i][j] = self._dados[i][j]
-                if j <= (self._colunas - 2):
-                    novaMatriz[i][self._colunas + j] = self._dados[i][j]
-        return novaMatriz
